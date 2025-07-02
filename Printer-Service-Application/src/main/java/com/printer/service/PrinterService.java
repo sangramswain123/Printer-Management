@@ -1,5 +1,6 @@
 package com.printer.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,9 +27,9 @@ public class PrinterService {
 	    return printerRepo.findAll();
 	}
 	
-	public Optional<Printer> findPrinter(int startFloor, boolean needsColor, int minSpeed){
+	public Optional<Printer> findPrinter(int startFloor, boolean needsColor, int minSpeed, int pages){
 		
-		if (startFloor < 0 || startFloor >= floors) {
+		if (startFloor < 0 || startFloor > floors) {
 	        throw new IllegalArgumentException("Invalid floor number: " + startFloor);
 	    }
 		
@@ -40,9 +41,13 @@ public class PrinterService {
 		        if (f < 0 || f >= floors) continue;
 		        List<Printer> printers = printerRepo.findByFloor(f);
 		        for (Printer p : printers) {
-		          if (p.isAvailable() && (!needsColor || p.isColorSupported())
+		          if (p.isAvailableNow() && (!needsColor || p.isColorSupported())
 		        		  && p.getSpeed() >= minSpeed) {
-		            return Optional.of(p);
+		        	  int duration = (int) Math.ceil((double) pages / p.getSpeed());
+                      p.setBusyUntil(LocalDateTime.now().plusMinutes(duration));
+                      printerRepo.save(p);
+
+		        	  return Optional.of(p);
 		          }
 		        }
 		      }

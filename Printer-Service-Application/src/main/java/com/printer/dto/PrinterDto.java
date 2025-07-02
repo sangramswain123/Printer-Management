@@ -1,24 +1,41 @@
 package com.printer.dto;
 
 public class PrinterDto {
-	private Long id;
-	private int floor;
-	public Long getId() {
-		return id;
+	
+	private int startFloor;
+    private boolean needsColor;
+    private int speed;
+    private int pages;
+	public int getStartFloor() {
+		return startFloor;
 	}
-	public void setId(Long id) {
-		this.id = id;
+	public void setStartFloor(int startFloor) {
+		this.startFloor = startFloor;
 	}
-	public int getFloor() {
-		return floor;
+	public boolean isNeedsColor() {
+		return needsColor;
 	}
-	public void setFloor(int floor) {
-		this.floor = floor;
+	public void setNeedsColor(boolean needsColor) {
+		this.needsColor = needsColor;
 	}
-	public PrinterDto(Long id, int floor) {
+	public int getSpeed() {
+		return speed;
+	}
+	public void setSpeed(int speed) {
+		this.speed = speed;
+	}
+	public int getPages() {
+		return pages;
+	}
+	public void setPages(int pages) {
+		this.pages = pages;
+	}
+	public PrinterDto(int startFloor, boolean needsColor, int speed, int pages) {
 		super();
-		this.id = id;
-		this.floor = floor;
+		this.startFloor = startFloor;
+		this.needsColor = needsColor;
+		this.speed = speed;
+		this.pages = pages;
 	}
 	public PrinterDto() {
 		super();
@@ -26,8 +43,10 @@ public class PrinterDto {
 	}
 	@Override
 	public String toString() {
-		return "PrinterDto [id=" + id + ", floor=" + floor + "]";
+		return "PrinterDto [startFloor=" + startFloor + ", needsColor=" + needsColor + ", speed=" + speed + ", pages="
+				+ pages + "]";
 	}
+    
 	
 	
 }

@@ -1,5 +1,7 @@
 package com.printer.model;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,8 +17,20 @@ public class Printer {
 	private boolean available;
 	private boolean colorSupported;
 	private int speed;
+	private LocalDateTime busyUntil;
+
+    public boolean isAvailableNow() {
+        return available && (busyUntil == null || busyUntil.isBefore(LocalDateTime.now()));
+    }
+
 	
 	
+	public LocalDateTime getBusyUntil() {
+		return busyUntil;
+	}
+	public void setBusyUntil(LocalDateTime busyUntil) {
+		this.busyUntil = busyUntil;
+	}
 	public Long getId() {
 		return id;
 	}
@@ -48,20 +62,20 @@ public class Printer {
 		this.speed = speed;
 	}
 	public Printer(int floor, boolean available, boolean colorSupported, int speed) {
-		super();
 		this.floor = floor;
 		this.available = available;
 		this.colorSupported = colorSupported;
 		this.speed = speed;
 	}
-	public Printer() {
-		super();
-		// TODO Auto-generated constructor stub
+	public Printer() {}
+
+	public Printer(Long id, int floor, boolean available, boolean colorSupported, int speed, LocalDateTime busyUntil) {
+		this.id = id;
+		this.floor = floor;
+		this.available = available;
+		this.colorSupported = colorSupported;
+		this.speed = speed;
+		this.busyUntil = busyUntil;
 	}
-	
-	
-	
-	
-	
 
 }

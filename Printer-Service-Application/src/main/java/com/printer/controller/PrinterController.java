@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.printer.dto.PrinterDto;
 import com.printer.model.Printer;
 import com.printer.service.PrinterService;
 
@@ -35,19 +36,31 @@ public class PrinterController {
 		return printerService.listAll();
 	}
 	
-	@GetMapping("/search")
-	public ResponseEntity<Printer> searchPrinter(@RequestParam int floor,
-			  @RequestParam boolean needsColor,
-			  @RequestParam int minSpeed) {
-		
-		Optional<Printer> printer = printerService.findPrinter(floor, needsColor, minSpeed);
-		
-		if (printer.isPresent()) {
-		    return ResponseEntity.ok(printer.get());
-		} else {
-		    return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-		}
-	}
+//	@GetMapping("/search")
+//	public ResponseEntity<Printer> searchPrinter(@RequestParam int floor,
+//			  @RequestParam boolean needsColor,
+//			  @RequestParam int minSpeed,@RequestParam int pages) {
+//		
+//		Optional<Printer> printer = printerService.findPrinter(floor, needsColor, minSpeed, pages);
+//		
+//		if (printer.isPresent()) {
+//		    return ResponseEntity.ok(printer.get());
+//		} else {
+//		    return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+//		}
+//	}
+	
+	@PostMapping("/print")
+    public ResponseEntity<?> assignPrintJob(@RequestBody PrinterDto request) {
+        return printerService.findPrinter(
+                request.getStartFloor(),
+                request.isNeedsColor(),
+                request.getSpeed(),
+                request.getPages()
+        ).map(p -> ResponseEntity.ok("Assigned to Printer ID " + p.getId() + " on floor " + p.getFloor()))
+         .orElse(ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body("No available printer found"));
+    }
+
 
 		
 	
